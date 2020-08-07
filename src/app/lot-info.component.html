@@ -1,0 +1,56 @@
+<div class="custom-div" *ngIf="data">
+    <mat-card>
+        <mat-list role="list" class="width40">
+            <mat-list-item role="listitem">{{data.fullName}}</mat-list-item>
+            <mat-list-item role="listitem">Топливо: {{data.fuel}}</mat-list-item>
+            <mat-list-item role="listitem">Тип двигателя: {{data.engine}}</mat-list-item>
+            <mat-list-item role="listitem">Повреждения: {{data.damage}}</mat-list-item>
+            <mat-list-item role="listitem" *ngIf="data.secondaryDamage">Вторичные повреждения: {{data.secondaryDamage}}</mat-list-item>
+            <mat-list-item role="listitem">Текущая ставка: {{data.lot.currentBid}} USD</mat-list-item>
+            <mat-list-item role="listitem">Локация: {{data.location.short}}</mat-list-item>
+            <mat-list-item role="listitem">Дата: {{data.auctionDate | date: 'full'}}</mat-list-item>
+        </mat-list>
+        <img src="{{data.photo}}">
+    </mat-card>
+</div>
+<!-- CALCULATOR Customs clearance -->
+<div *ngIf="data">
+    <div class="custom-grid">
+        <mat-list role="list">
+               <mat-list-item role="listitem">
+                   <span class="custom-left">Стоимость лота</span>
+                   <span>${{data.lot.currentBid}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <span class="custom-left">Сборы аукциона</span>
+                    <span>${{'3'}}</span>
+                </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+        <mat-list role="list">
+            <mat-list-item role="listitem">
+                <span class="custom-left">Акциз</span>
+                <span>${{'3'}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+                <span class="custom-left">Пошлина</span>
+                <span>${{'3'}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+                <span class="custom-left">НДС</span>
+                <span>${{'3'}}</span>
+            </mat-list-item>
+        </mat-list>
+    </div>
+    <mat-card class="bottom-summary mat-elevation-z3">
+        <span class="custom-left">Сумма таможенных платежей</span>
+        <span>${{'3'}}</span>
+    </mat-card>
+</div>
+<!-- CALCULATOR Shipping -->
+<div *ngIf="data">
+    
+</div>

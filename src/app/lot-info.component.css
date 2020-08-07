@@ -1,0 +1,28 @@
+.width40 {
+    width: 40%;
+}
+.mat-card {
+    display: flex;
+}
+.custom-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.custom-left {
+    margin: 0 auto 0 0;
+}
+.mat-list-item {
+    min-width: 250px;
+}
+.custom-grid {
+    display: flex;
+    justify-content: center;
+}
+.bottom-summary {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    max-width: 600px;
+    font-size: large;
+}

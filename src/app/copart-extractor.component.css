@@ -1,0 +1,14 @@
+.example-form-field {
+    width: 400px;
+}
+.big-button {
+    width: 200px;
+}
+.custom-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.custom-mat-card {
+    width: 600px;
+}
