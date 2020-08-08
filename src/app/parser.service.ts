@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
     providedIn: 'root'
 })
 export class ParserService {
-    private BACKURL = 'http://localhost:3000/api/parse';
+    private BACKURL = '/api/parse';
 
     constructor(private http: HttpClient) { }
 
