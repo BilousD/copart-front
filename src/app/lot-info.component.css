@@ -3,7 +3,7 @@
 }
 .custom-img {
     width: 100%;
-    max-width: 100%;
+    max-width: max-content;
 }
 .mat-card {
     display: flex;
