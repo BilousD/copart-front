@@ -1,6 +1,6 @@
 <div  *ngIf="data">
 <div [ngClass]="{'custom-div': bigScreen, 'custom-div-grid': !bigScreen}">
-    <img src="{{data.photo}}">
+    <img src="{{data.photo}}" class="custom-img">
     <mat-card>
         <mat-list role="list" class="width40">
             <mat-list-item role="listitem">{{data.fullName}}</mat-list-item>

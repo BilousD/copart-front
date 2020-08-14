@@ -1,6 +1,10 @@
 .width40 {
     width: 40%;
 }
+.custom-img {
+    width: 100%;
+    max-width: 100%;
+}
 .mat-card {
     display: flex;
 }
