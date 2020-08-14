@@ -1,4 +1,6 @@
-<div class="custom-div" *ngIf="data">
+<div  *ngIf="data">
+<div [ngClass]="{'custom-div': bigScreen, 'custom-div-grid': !bigScreen}">
+    <img src="{{data.photo}}">
     <mat-card>
         <mat-list role="list" class="width40">
             <mat-list-item role="listitem">{{data.fullName}}</mat-list-item>
@@ -10,47 +12,107 @@
             <mat-list-item role="listitem">Локация: {{data.location.short}}</mat-list-item>
             <mat-list-item role="listitem">Дата: {{data.auctionDate | date: 'full'}}</mat-list-item>
         </mat-list>
-        <img src="{{data.photo}}">
     </mat-card>
 </div>
+
+<!-- EURO TO USD CURRENCY EXCHANGE RATE (or something like this, im not an englishman) -->
+<div class="currency-change">
+    <span style="display: block ruby">€1 = $</span>
+    <input matInput class="custom-input" style="width: 30px; margin-left: 2px" [value]="euro2usd" #inpE2U (change)="onE2UChange(inpE2U.value)">
+</div>
 <!-- CALCULATOR Customs clearance -->
-<div *ngIf="data">
-    <div class="custom-grid">
-        <mat-list role="list">
-               <mat-list-item role="listitem">
-                   <span class="custom-left">Стоимость лота</span>
-                   <span>${{data.lot.currentBid}}</span>
-            </mat-list-item>
-            <mat-divider></mat-divider>
+<div [ngClass]="{'custom-super-div': bigScreen}">
+    <div class="custom-flex-center">
+        <span class="mat-title custom-title">Калькулятор растаможки</span>
+        <div class="custom-grid">
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <span class="custom-left">Стоимость</span>
+                    <span class="custom-right">$</span>
+                    <input matInput class="custom-input" style="width: 75px" [value]="data.lot.currentBid" #inpPrice (change)="onCPChange(inpPrice.value)">
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <span class="custom-left">Акциз</span>
+                    <span class="custom-right">{{calculated.excise ? calculated.excise : calculate()}}</span>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+
+                <!--
                 <mat-list-item role="listitem">
                     <span class="custom-left">Сборы аукциона</span>
-                    <span>${{'3'}}</span>
+                    <span class="custom-right">${{'no'}}</span>
                 </mat-list-item>
-            <mat-divider></mat-divider>
-        </mat-list>
+                <mat-divider></mat-divider> -->
+            </mat-list>
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <span class="custom-left">Пошлина</span>
+                    <span class="custom-right">{{calculated.fee ? calculated.fee : calculate()}}</span>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <span class="custom-left">НДС</span>
+                    <span class="custom-right">{{calculated.vat ? calculated.vat : calculate()}}</span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <mat-card class="bottom-summary mat-elevation-z3">
+            <span class="custom-left">Сумма таможенных платежей</span>
+            <span class="custom-right">{{calculated.sum ? calculated.sum : calculate()}}</span>
+        </mat-card>
+    </div>
+    <!-- CALCULATOR Shipping -->
+    <div class="custom-flex-center">
+        <span class="mat-title custom-title">Калькулятор доставки</span>
+        <mat-form-field style="width: 100px">
+            <input matInput placeholder="Код штата" [formControl]="myControl" [matAutocomplete]="auto" [value]="data.location.state" #loc (ngModelChange)="onLocChange(loc.value)">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-card class="bottom-summary mat-elevation-z3">
+            <span class="custom-left">Стоимость доставки</span>
+            <span class="custom-right">{{calculated.ship}}</span>
+        </mat-card>
+    </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="custom-flex-center">
+    <span class="mat-title custom-title">Общая сумма</span>
+    <div class="custom-grid">
         <mat-list role="list">
             <mat-list-item role="listitem">
-                <span class="custom-left">Акциз</span>
-                <span>${{'3'}}</span>
+                <span class="custom-left">Стоимость лота</span>
+                <span class="custom-right">${{carPrice?carPrice:data.lot.currentBid}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <!--
+            <mat-list-item role="listitem">
+                <span class="custom-left">Сборы аукциона</span>
+                <span class="custom-right">${{'no'}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+        <mat-list role="list"> -->
+            <mat-list-item role="listitem">
+                <span class="custom-left">Стоимость растаможки</span>
+                <span class="custom-right">{{calculated.sum}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item role="listitem">
-                <span class="custom-left">Пошлина</span>
-                <span>${{'3'}}</span>
+                <span class="custom-left">Стоимость доставки</span>
+                <span class="custom-right">{{calculated.ship}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item role="listitem">
-                <span class="custom-left">НДС</span>
-                <span>${{'3'}}</span>
+                <span class="custom-left">Полная стоимость</span>
+                <span class="custom-right">{{calculated.fullSum}}</span>
             </mat-list-item>
         </mat-list>
     </div>
-    <mat-card class="bottom-summary mat-elevation-z3">
-        <span class="custom-left">Сумма таможенных платежей</span>
-        <span>${{'3'}}</span>
-    </mat-card>
 </div>
-<!-- CALCULATOR Shipping -->
-<div *ngIf="data">
-    
 </div>

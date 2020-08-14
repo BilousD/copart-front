@@ -9,7 +9,7 @@ import {LotType} from "./types";
 export class CopartExtractorComponent implements OnInit {
 
     // placeholder
-    value = 'https://www.copart.com/lot/41825860';
+    value = 'https://www.copart.com/lot/40427970';
     data: LotType;
 
     constructor(private parserService: ParserService) { }

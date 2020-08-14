@@ -9,6 +9,11 @@
     justify-content: center;
     align-items: center;
 }
+.custom-div-grid {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
 .custom-left {
     margin: 0 auto 0 0;
 }
@@ -25,4 +30,30 @@
     margin: auto;
     max-width: 600px;
     font-size: large;
+}
+.currency-change {
+    display: flex;
+    justify-content: right;
+    font-size: small;
+}
+.custom-flex-center {
+    display: grid;
+    justify-content: center;
+    margin: 30px;
+}
+.custom-title {
+    display: flex;
+    justify-content: center;
+    font-size: x-large;
+}
+.custom-right {
+    margin-left: 24px;
+}
+.custom-input {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.custom-super-div {
+    display: flex;
+    justify-content: center;
 }
