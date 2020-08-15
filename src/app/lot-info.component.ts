@@ -13,21 +13,24 @@ import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 export class LotInfoComponent implements OnInit {
     euro2usd = (1.18).toString();
     @Input() data: LotType;
-    calculated = {excise: '', fee: '', vat: '', sum: '', ship: '', fullSum: ''};
+    calculated = {excise: '', fee: '', vat: '', sum: '', ship: '', fullSum: '', fullShip: ''};
     carPrice = '';
     carLocation = '';
+    broker = 900;
+    commission = 1000;
+    auc = '';
 
     fuelToExciseExample = {
         // fuel type (as specified in copart)
         'DIESEL':{
-            // excise rate: [lower breakpoint,higher breakpoint]
-            75:[0,3.5],
-            150:[3.5,30],
-            300:[30]
+            // higher breakpoint: excise rate; 0 - highest breakpoint? or something like that
+            3.5:75,
+            30:150,
+            0:300
         },
         'GAS':{
-            50:[0,3],
-            100:[3]
+            3:50,
+            0:100
         },
         // if DEFAULT specified, it is used if fuel type is not specified, or no excise rate specified for this fuel type
         'DEFAULT':50
@@ -37,7 +40,42 @@ export class LotInfoComponent implements OnInit {
         'NY':1400,
         'OK':1500,
         'NV':1450
-    }
+    };
+    auctionFees = {
+        // higher breakpoint: fee
+        50:27.5,
+        100:40,
+        200:65,
+        300:90,
+        400:110,
+        500:130,
+        600:150,
+        700:170,
+        800:190,
+        900:210,
+        1000:230,
+        1200:255,
+        1300:290,
+        1400:305,
+        1500:315,
+        1600:325,
+        1700:345,
+        1800:355,
+        2000:375,
+        2400:415,
+        2500:425,
+        3000:455,
+        3500:565,
+        4000:615,
+        4500:640,
+        5000:665,
+        6000:765,
+        7500:790,
+        10000:890,
+        15000:1050,
+        // if less than 1, than it's a %
+        0:0.10
+    };
 
     bigScreen = false;
 
@@ -70,6 +108,7 @@ export class LotInfoComponent implements OnInit {
         let year = 2020;
         let price = 0;
         let euroUsd = 1.18;
+        let aucFee = this.auctionFees['0'];
         // try catch?
         volume = parseFloat(this.data.engine.split('L')[0]);
         year = parseInt(this.data.year);
@@ -78,15 +117,20 @@ export class LotInfoComponent implements OnInit {
         //
         Object.keys(this.fuelToExciseExample).forEach(key => {
             if (key !== 'DEFAULT' && this.data.fuel === key) {
+                exciseRateEur = parseFloat(this.fuelToExciseExample[key]['0']);
                 Object.keys(this.fuelToExciseExample[key]).forEach(exciseRateKey => {
-                    const arr = this.fuelToExciseExample[key][exciseRateKey];
-                    if (volume > arr[0] && (!arr[1] || volume < arr[1])) {
-                        exciseRateEur = parseInt(exciseRateKey);
+                    if (volume < parseFloat(exciseRateKey)) {
+                        exciseRateEur = parseFloat(this.fuelToExciseExample[key][exciseRateKey]);
                     }
                 });
             }
         });
-
+        Object.keys(this.auctionFees).forEach(key => {
+            if (price < parseFloat(key)) {
+                aucFee = this.auctionFees[key];
+            }
+        })
+        this.auc = aucFee.toString();
         const coef = (new Date().getFullYear() - year);
 
         // акциз
@@ -94,9 +138,9 @@ export class LotInfoComponent implements OnInit {
         const exciseSumUsd = exciseSumEur * euroUsd;
 
         // пошлина
-        const feeUsd = (price + exciseSumUsd) * 0.1;
+        const feeUsd = (price + aucFee + exciseSumUsd) * 0.1;
         // ндс
-        const vatUsd = (price + exciseSumUsd + feeUsd) * 0.2;
+        const vatUsd = Math.round((price + aucFee + exciseSumUsd + feeUsd) * 0.2 * 100)/100;
 
         const sumUsd = exciseSumUsd + feeUsd + vatUsd;
 
@@ -111,29 +155,16 @@ export class LotInfoComponent implements OnInit {
         Object.keys(this.shippingPricesExample).forEach(key => {
             if (state === key) {
                 shipCost = this.shippingPricesExample[key];
-                console.log('ship: ', shipCost);
             }
         });
         this.calculated.ship = `€${Math.round(shipCost*euroUsd * 100) / 100} ($${shipCost})`;
+        let fullShip = shipCost+this.broker+this.commission;
+        this.calculated.fullShip = `€${Math.round((fullShip)*euroUsd * 100) / 100} ($${fullShip})`;
+
         // full sum
-        let fullSum = sumUsd+shipCost+price;
-        console.log('fullSum ', fullSum);
-        console.log('customs sum: ',sumUsd,' ship: ',shipCost,' price: ',price);
+        let fullSum = sumUsd+fullShip+price;
         this.calculated.fullSum = `€${Math.round(fullSum*euroUsd * 100) / 100} ($${fullSum})`
     }
-    // calculateShipping() {
-    //     let state = (this.carLocation)?this.carLocation:this.data.location.state;
-    //     let euroUsd = parseFloat(this.euro2usd);
-    //     Object.keys(this.shippingPricesExample).forEach(key => {
-    //         if (state === key) {
-    //             this.calculated.ship = `€${Math.round(this.shippingPricesExample[key]*euroUsd * 100) / 100} ($${this.shippingPricesExample[key]}`;
-    //             return;
-    //         }
-    //     });
-    // }
-    // toEur(str: string) {
-    //     return (parseInt(str) / parseFloat(this.euro2usd)).toString();
-    // }
     onE2UChange(e2u) {
         this.euro2usd = e2u;
         this.calculate();

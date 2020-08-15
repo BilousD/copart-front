@@ -24,7 +24,7 @@
 <div [ngClass]="{'custom-super-div': bigScreen}">
     <div class="custom-flex-center">
         <span class="mat-title custom-title">Калькулятор растаможки</span>
-        <div class="custom-grid">
+        <div [ngClass]="{'custom-flex': bigScreen, 'custom-grid': !bigScreen}">
             <mat-list role="list">
                 <mat-list-item role="listitem">
                     <span class="custom-left">Стоимость</span>
@@ -33,19 +33,17 @@
                 </mat-list-item>
                 <mat-divider></mat-divider>
                 <mat-list-item role="listitem">
+                    <span class="custom-left">Сборы аукциона</span>
+                    <span class="custom-right">${{auc}}</span>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </mat-list>
+            <mat-list role="list">
+                <mat-list-item role="listitem">
                     <span class="custom-left">Акциз</span>
                     <span class="custom-right">{{calculated.excise ? calculated.excise : calculate()}}</span>
                 </mat-list-item>
                 <mat-divider></mat-divider>
-
-                <!--
-                <mat-list-item role="listitem">
-                    <span class="custom-left">Сборы аукциона</span>
-                    <span class="custom-right">${{'no'}}</span>
-                </mat-list-item>
-                <mat-divider></mat-divider> -->
-            </mat-list>
-            <mat-list role="list">
                 <mat-list-item role="listitem">
                     <span class="custom-left">Пошлина</span>
                     <span class="custom-right">{{calculated.fee ? calculated.fee : calculate()}}</span>
@@ -73,9 +71,25 @@
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
+        <mat-list role="list">
+            <mat-list-item role="listitem">
+                <span class="custom-left">Стоимость доставки</span>
+                <span class="custom-right">{{calculated.ship}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+                <span class="custom-left">Брокер/Экспедитор</span>
+                <span class="custom-right">${{broker.toString()}}</span>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item role="listitem">
+                <span class="custom-left">Комиссия RoyalMotors</span>
+                <span class="custom-right">${{commission.toString()}}</span>
+            </mat-list-item>
+        </mat-list>
         <mat-card class="bottom-summary mat-elevation-z3">
-            <span class="custom-left">Стоимость доставки</span>
-            <span class="custom-right">{{calculated.ship}}</span>
+            <span class="custom-left">Общая сумма</span>
+            <span class="custom-right">{{calculated.fullShip}}</span>
         </mat-card>
     </div>
 </div>
@@ -83,21 +97,21 @@
 <!-- SUMMARY -->
 <div class="custom-flex-center">
     <span class="mat-title custom-title">Общая сумма</span>
-    <div class="custom-grid">
+    <div [ngClass]="{'custom-flex': bigScreen, 'custom-grid': !bigScreen}">
         <mat-list role="list">
             <mat-list-item role="listitem">
                 <span class="custom-left">Стоимость лота</span>
                 <span class="custom-right">${{carPrice?carPrice:data.lot.currentBid}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
-            <!--
+
             <mat-list-item role="listitem">
-                <span class="custom-left">Сборы аукциона</span>
-                <span class="custom-right">${{'no'}}</span>
+                <span class="custom-left">Аукционный сбор</span>
+                <span class="custom-right">${{auc}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
         </mat-list>
-        <mat-list role="list"> -->
+        <mat-list role="list">
             <mat-list-item role="listitem">
                 <span class="custom-left">Стоимость растаможки</span>
                 <span class="custom-right">{{calculated.sum}}</span>
@@ -105,14 +119,16 @@
             <mat-divider></mat-divider>
             <mat-list-item role="listitem">
                 <span class="custom-left">Стоимость доставки</span>
-                <span class="custom-right">{{calculated.ship}}</span>
+                <span class="custom-right">{{calculated.fullShip}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item role="listitem">
-                <span class="custom-left">Полная стоимость</span>
-                <span class="custom-right">{{calculated.fullSum}}</span>
             </mat-list-item>
         </mat-list>
     </div>
+        <mat-card class="bottom-summary mat-elevation-z3">
+            <span class="custom-left">Полная стоимость</span>
+            <span class="custom-right">{{calculated.fullSum}}</span>
+        </mat-card>
 </div>
 </div>

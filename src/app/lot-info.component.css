@@ -25,6 +25,10 @@
     min-width: 250px;
 }
 .custom-grid {
+    display: grid;
+    justify-content: center;
+}
+.custom-flex {
     display: flex;
     justify-content: center;
 }
