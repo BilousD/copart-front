@@ -125,11 +125,16 @@ export class LotInfoComponent implements OnInit {
                 });
             }
         });
-        Object.keys(this.auctionFees).forEach(key => {
+        for(let key of Object.keys(this.auctionFees)) {
             if (price < parseFloat(key)) {
                 aucFee = this.auctionFees[key];
+                break;
             }
-        })
+        }
+        if (aucFee < 1) {
+            // if aucFee is a percentage of car price - translate it from percentage into usd
+            aucFee = Math.round(aucFee * price * 100)/100;
+        }
         this.auc = aucFee.toString();
         const coef = (new Date().getFullYear() - year);
 
@@ -138,11 +143,11 @@ export class LotInfoComponent implements OnInit {
         const exciseSumUsd = exciseSumEur * euroUsd;
 
         // пошлина
-        const feeUsd = (price + aucFee + exciseSumUsd) * 0.1;
+        const feeUsd = Math.round((price + aucFee + exciseSumUsd) * 0.1 * 100)/100;
         // ндс
         const vatUsd = Math.round((price + aucFee + exciseSumUsd + feeUsd) * 0.2 * 100)/100;
 
-        const sumUsd = exciseSumUsd + feeUsd + vatUsd;
+        const sumUsd = Math.round((exciseSumUsd + feeUsd + vatUsd) * 100)/100;
 
         this.calculated.excise = `€${Math.round(exciseSumEur*euroUsd * 100) / 100} ($${exciseSumUsd})`;
         this.calculated.fee = `€${Math.round(feeUsd*euroUsd * 100) / 100} ($${feeUsd})`;
@@ -159,10 +164,11 @@ export class LotInfoComponent implements OnInit {
         });
         this.calculated.ship = `€${Math.round(shipCost*euroUsd * 100) / 100} ($${shipCost})`;
         let fullShip = shipCost+this.broker+this.commission;
+
         this.calculated.fullShip = `€${Math.round((fullShip)*euroUsd * 100) / 100} ($${fullShip})`;
 
         // full sum
-        let fullSum = sumUsd+fullShip+price;
+        let fullSum = Math.round((sumUsd+fullShip+price)*100)/100;
         this.calculated.fullSum = `€${Math.round(fullSum*euroUsd * 100) / 100} ($${fullSum})`
     }
     onE2UChange(e2u) {
