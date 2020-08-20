@@ -1,11 +1,16 @@
-<div class="custom-div">
-    <mat-form-field class="example-form-field">
-        <mat-label>Вставьте ссылку из Copart</mat-label>
-        <input matInput type="text" [(ngModel)]="value" placeholder="https://www.copart.com/lot/50811178">
-        <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-            <mat-icon>close</mat-icon>
-        </button>
-    </mat-form-field>
-    <button mat-raised-button class="big-button" (click)="OnClick()">Сканировать</button>
+<div class="custom-mega-div">
+    <div class="custom-div">
+        <mat-form-field class="example-form-field">
+            <mat-label>Вставьте ссылку из Copart</mat-label>
+            <input matInput type="text" [(ngModel)]="value" [pattern]="copPattern" #copsite="ngModel" placeholder="https://www.copart.com/lot/50811178">
+            <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-raised-button class="big-button" (click)="OnClick()">Сканировать</button>
+    </div>
+    <div *ngIf="copsite.errors?.pattern">
+        <span class="mat-error">Некорректная ссылка</span>
+    </div>
 </div>
 <app-lot-info [data]="data"></app-lot-info>

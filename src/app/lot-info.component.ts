@@ -4,6 +4,7 @@ import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
+import {ParserService} from "./parser.service";
 
 @Component({
     selector: 'app-lot-info',
@@ -20,72 +21,78 @@ export class LotInfoComponent implements OnInit {
     commission = 1000;
     auc = '';
 
-    fuelToExciseExample = {
-        // fuel type (as specified in copart)
-        'DIESEL':[
-            // higher breakpoint: excise rate; 0 - highest breakpoint? or something like that
-            [3.5, 75],
-            [30, 150],
-            [0, 300]
-        ],
-        'GAS':[
-            [3, 50],
-            [0, 100]
-        ],
-        // if DEFAULT specified, it is used if fuel type is not specified, or no excise rate specified for this fuel type
-        'DEFAULT':50
+    fuelToExcise: {} = {
+        // // fuel type (as specified in copart)
+        // 'DIESEL':[
+        //     // higher breakpoint: excise rate; 0 - highest breakpoint? or something like that
+        //     [3.5, 75],
+        //     [30, 150],
+        //     [0, 300]
+        // ],
+        // 'GAS':[
+        //     [3, 50],
+        //     [0, 100]
+        // ],
+        // // if DEFAULT specified, it is used if fuel type is not specified, or no excise rate specified for this fuel type
+        // 'DEFAULT':50
     };
-    shippingPricesExample = {
-        'TX':1300,
-        'NY':1400,
-        'OK':1500,
-        'NV':1450
+    shippingPrices: {} = {
+        // 'TX':1300,
+        // 'NY':1400,
+        // 'OK':1500,
+        // 'NV':1450
     };
     auctionFees = [
-        // higher breakpoint: fee
-        [50,27.5],
-        [100,40],
-        [200,65],
-        [300,90],
-        [400,110],
-        [500,130],
-        [600,150],
-        [700,170],
-        [800,190],
-        [900,210],
-        [1000,230],
-        [1200,255],
-        [1300,290],
-        [1400,305],
-        [1500,315],
-        [1600,325],
-        [1700,345],
-        [1800,355],
-        [2000,375],
-        [2400,415],
-        [2500,425],
-        [3000,455],
-        [3500,565],
-        [4000,615],
-        [4500,640],
-        [5000,665],
-        [6000,765],
-        [7500,790],
-        [10000,890],
-        [15000,1050],
-        // if less than 1, than it's a %
-        [0,0.10]
+        // // higher breakpoint: fee
+        // [50,27.5],
+        // [100,40],
+        // [200,65],
+        // [300,90],
+        // [400,110],
+        // [500,130],
+        // [600,150],
+        // [700,170],
+        // [800,190],
+        // [900,210],
+        // [1000,230],
+        // [1200,255],
+        // [1300,290],
+        // [1400,305],
+        // [1500,315],
+        // [1600,325],
+        // [1700,345],
+        // [1800,355],
+        // [2000,375],
+        // [2400,415],
+        // [2500,425],
+        // [3000,455],
+        // [3500,565],
+        // [4000,615],
+        // [4500,640],
+        // [5000,665],
+        // [6000,765],
+        // [7500,790],
+        // [10000,890],
+        // [15000,1050],
+        // // if less than 1, than it's a %
+        // [0,0.10]
     ];
 
     bigScreen = false;
 
     myControl = new FormControl();
-    options: string[] = Object.keys(this.shippingPricesExample);
+    options: string[] = Object.keys(this.shippingPrices);
     filteredOptions: Observable<string[]>;
 
-    constructor(public breakpointObserver: BreakpointObserver) { }
+    constructor(public breakpointObserver: BreakpointObserver, public parserService: ParserService) { }
 
     ngOnInit() {
+        this.parserService.requestCalc().subscribe(res => {
+            this.auctionFees = res.data.auction;
+            this.shippingPrices = res.data.shipping;
+            this.fuelToExcise = res.data.excise;
+            this.options = Object.keys(this.shippingPrices);
+        });
         this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(''),
             map(value => this._filter(value))
@@ -103,16 +110,16 @@ export class LotInfoComponent implements OnInit {
     }
 
     calculate() {
-        let exciseRateEur = this.fuelToExciseExample['DEFAULT'];
+        let exciseRateEur = this.fuelToExcise['DEFAULT'];
         let volume = parseFloat(this.data.engine.split('L')[0]);
         let year = parseInt(this.data.year);
         let price = parseInt((this.carPrice)?this.carPrice:this.data.lot.currentBid);
         let euroUsd = parseFloat(this.euro2usd);
         let aucFee = this.auctionFees[this.auctionFees.length-1][1];
 
-        Object.keys(this.fuelToExciseExample).forEach(key => {
+        Object.keys(this.fuelToExcise).forEach(key => {
             if (key !== 'DEFAULT' && this.data.fuel === key) {
-                let array = this.fuelToExciseExample[key];
+                let array = this.fuelToExcise[key];
                 exciseRateEur = array[array.length-1][1];
                 for (let arr of array) {
                     if (volume < arr[0]) {
@@ -153,9 +160,9 @@ export class LotInfoComponent implements OnInit {
         // shipping
         let state = (this.carLocation)?this.carLocation:this.data.location.state;
         let shipCost = 0;
-        Object.keys(this.shippingPricesExample).forEach(key => {
+        Object.keys(this.shippingPrices).forEach(key => {
             if (state === key) {
-                shipCost = this.shippingPricesExample[key];
+                shipCost = this.shippingPrices[key];
             }
         });
         this.calculated.ship = `€${Math.round(shipCost*euroUsd * 100) / 100} ($${shipCost})`;

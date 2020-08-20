@@ -11,6 +11,7 @@ export class CopartExtractorComponent implements OnInit {
     // placeholder
     value = 'https://www.copart.com/lot/40427970';
     data: LotType;
+    copPattern = '^https:\\/\\/(w{3}\\.)?copart\\.com\\/lot\\/[\\d]+[\\/\\w\\-]+$';
 
     constructor(private parserService: ParserService) { }
 

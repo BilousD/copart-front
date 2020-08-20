@@ -18,4 +18,12 @@ export class ParserService {
             }, image
         }>(this.BACKURL, {uri});
     }
+
+    requestCalc() {
+        return this.http.get<{data: {
+                shipping:{},
+                excise:{},
+                auction:[]
+            }}>(this.BACKURL);
+    }
 }

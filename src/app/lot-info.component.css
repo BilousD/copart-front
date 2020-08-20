@@ -8,6 +8,10 @@
 .mat-card {
     display: flex;
 }
+.fat {
+    font-weight: bold;
+    margin-right: 14px;
+}
 .custom-div {
     display: flex;
     justify-content: center;

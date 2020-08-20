@@ -3,14 +3,16 @@
     <img src="{{data.photo}}" class="custom-img">
     <mat-card>
         <mat-list role="list" class="width40">
-            <mat-list-item role="listitem">{{data.fullName}}</mat-list-item>
-            <mat-list-item role="listitem">Топливо: {{data.fuel}}</mat-list-item>
-            <mat-list-item role="listitem">Тип двигателя: {{data.engine}}</mat-list-item>
-            <mat-list-item role="listitem">Повреждения: {{data.damage}}</mat-list-item>
-            <mat-list-item role="listitem" *ngIf="data.secondaryDamage">Вторичные повреждения: {{data.secondaryDamage}}</mat-list-item>
-            <mat-list-item role="listitem">Текущая ставка: {{data.lot.currentBid}} USD</mat-list-item>
-            <mat-list-item role="listitem">Локация: {{data.location.short}}</mat-list-item>
-            <mat-list-item role="listitem">Дата: {{data.auctionDate | date: 'full'}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Марка:</span> {{data.marka}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Модель:</span> {{data.model}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Год:</span> {{data.year}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Топливо:</span> {{data.fuel}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Тип двигателя:</span> {{data.engine}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Повреждения:</span> {{data.damage}}</mat-list-item>
+            <mat-list-item role="listitem" *ngIf="data.secondaryDamage"><span class="fat">Вторичные повреждения:</span> {{data.secondaryDamage}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Текущая ставка:</span> {{data.lot.currentBid}} USD</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Локация:</span> {{data.location.short}}</mat-list-item>
+            <mat-list-item role="listitem"><span class="fat">Дата аукциона:</span> {{data.auctionDate | date: 'full'}}</mat-list-item>
         </mat-list>
     </mat-card>
 </div>
@@ -73,7 +75,7 @@
         </mat-form-field>
         <mat-list role="list">
             <mat-list-item role="listitem">
-                <span class="custom-left">Стоимость доставки</span>
+                <span class="custom-left">Стоимость доставки в Одессу</span>
                 <span class="custom-right">{{calculated.ship}}</span>
             </mat-list-item>
             <mat-divider></mat-divider>
