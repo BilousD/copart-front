@@ -108,7 +108,7 @@ export class LotInfoComponent implements OnInit {
         let year = parseInt(this.data.year);
         let price = parseInt((this.carPrice)?this.carPrice:this.data.lot.currentBid);
         let euroUsd = parseFloat(this.euro2usd);
-        let aucFee = this.auctionFees['0'];
+        let aucFee = this.auctionFees[this.auctionFees.length-1][1];
 
         Object.keys(this.fuelToExciseExample).forEach(key => {
             if (key !== 'DEFAULT' && this.data.fuel === key) {
