@@ -12,6 +12,7 @@
 .custom-mega-div {
     display: grid;
     justify-content: center;
+    align-items: center;
 }
 .custom-mat-card {
     width: 600px;

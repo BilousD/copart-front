@@ -1,5 +1,5 @@
 <div class="custom-mega-div">
-    <div class="custom-div">
+    <div [ngClass]="{'custom-div': bigScreen, 'custom-mega-div': !bigScreen}">
         <mat-form-field class="example-form-field">
             <mat-label>Вставьте ссылку из Copart</mat-label>
             <input matInput type="text" [(ngModel)]="value" [pattern]="copPattern" #copsite="ngModel" placeholder="https://www.copart.com/lot/50811178">

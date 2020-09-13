@@ -21,62 +21,9 @@ export class LotInfoComponent implements OnInit {
     commission = 1000;
     auc = '';
 
-    fuelToExcise: {} = {
-        // // fuel type (as specified in copart)
-        // 'DIESEL':[
-        //     // higher breakpoint: excise rate; 0 - highest breakpoint? or something like that
-        //     [3.5, 75],
-        //     [30, 150],
-        //     [0, 300]
-        // ],
-        // 'GAS':[
-        //     [3, 50],
-        //     [0, 100]
-        // ],
-        // // if DEFAULT specified, it is used if fuel type is not specified, or no excise rate specified for this fuel type
-        // 'DEFAULT':50
-    };
-    shippingPrices: {} = {
-        // 'TX':1300,
-        // 'NY':1400,
-        // 'OK':1500,
-        // 'NV':1450
-    };
-    auctionFees = [
-        // // higher breakpoint: fee
-        // [50,27.5],
-        // [100,40],
-        // [200,65],
-        // [300,90],
-        // [400,110],
-        // [500,130],
-        // [600,150],
-        // [700,170],
-        // [800,190],
-        // [900,210],
-        // [1000,230],
-        // [1200,255],
-        // [1300,290],
-        // [1400,305],
-        // [1500,315],
-        // [1600,325],
-        // [1700,345],
-        // [1800,355],
-        // [2000,375],
-        // [2400,415],
-        // [2500,425],
-        // [3000,455],
-        // [3500,565],
-        // [4000,615],
-        // [4500,640],
-        // [5000,665],
-        // [6000,765],
-        // [7500,790],
-        // [10000,890],
-        // [15000,1050],
-        // // if less than 1, than it's a %
-        // [0,0.10]
-    ];
+    fuelToExcise: {} = {};
+    shippingPrices: {} = {};
+    auctionFees = [];
 
     bigScreen = false;
 

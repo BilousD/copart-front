@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
     providedIn: 'root'
 })
 export class ParserService {
-    private BACKURL = '/api/parse';
+    private BACK_URL = '/api/parse';
 
     constructor(private http: HttpClient) { }
 
@@ -16,7 +16,7 @@ export class ParserService {
                 buyerNumber,buyTodayBid,currentBid,sealedBid,hasBid,lotSold,bidStatus
                 }
             }, image
-        }>(this.BACKURL, {uri});
+        }>(this.BACK_URL, {uri});
     }
 
     requestCalc() {
@@ -24,6 +24,20 @@ export class ParserService {
                 shipping:{},
                 excise:{},
                 auction:[]
-            }}>(this.BACKURL);
+            }}>(this.BACK_URL);
+    }
+
+    requestRaw() {
+        return this.http.get<{data: {
+                shipping:{},
+                excise:{},
+                auction:[]
+            }}>(this.BACK_URL + '/raw');
+    }
+
+    sendRaw(shipping, excise, auction, pass) {
+        this.http.put<{}>(this.BACK_URL + '/params', {shipping, excise, auction, pass}).subscribe(() => {
+            console.log('putted?');
+        });
     }
 }

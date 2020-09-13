@@ -60,6 +60,7 @@
 }
 .custom-right {
     margin-left: 24px;
+    direction: rtl;
 }
 .custom-input {
     border-bottom-style: solid;

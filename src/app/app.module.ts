@@ -8,19 +8,27 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { LotInfoComponent } from './lot-info.component';
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { ChangeParamsComponent } from './change-params.component';
+import {ErrorInterceptor} from "./error.interceptor";
+import {ErrorComponent} from "./error/error.component";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatTabsModule} from "@angular/material/tabs";
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CopartExtractorComponent,
-    LotInfoComponent
-  ],
+    declarations: [
+        AppComponent,
+        CopartExtractorComponent,
+        LotInfoComponent,
+        ChangeParamsComponent,
+        ErrorComponent
+    ],
     imports: [
         BrowserModule,
         FormsModule,
@@ -33,9 +41,14 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         MatCardModule,
         MatGridListModule,
         MatAutocompleteModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatTabsModule,
+        AppRoutingModule
     ],
-  providers: [],
+  providers: [
+      {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

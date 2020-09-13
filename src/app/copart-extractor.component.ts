@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ParserService} from "./parser.service";
 import {LotType} from "./types";
+import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 @Component({
     selector: 'app-copart-extractor',
     templateUrl: './copart-extractor.component.html',
@@ -12,10 +13,16 @@ export class CopartExtractorComponent implements OnInit {
     value = 'https://www.copart.com/lot/40427970';
     data: LotType;
     copPattern = '^https:\\/\\/(w{3}\\.)?copart\\.com\\/lot\\/[\\d]+[\\/\\w\\-]+$';
+    bigScreen = false;
 
-    constructor(private parserService: ParserService) { }
+    constructor(private parserService: ParserService, public breakpointObserver: BreakpointObserver) { }
 
     ngOnInit(): void {
+        this.breakpointObserver
+            .observe(['(min-width: 1200px)'])
+            .subscribe((state: BreakpointState) => {
+                this.bigScreen = state.matches;
+            });
     }
 
     OnClick() {
